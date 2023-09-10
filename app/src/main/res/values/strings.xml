@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">GuessingGame</string>
+    <string name="enter_a_number">Enter a number</string>
+    <string name="play">Guess</string>
+    <string name="again">Play Again</string>
+    <string name="descriptipn">Try to guess number I\'m thinking \nof from 1-10!</string>
+    <string name="hint">Hint: %s</string>
+</resources>
