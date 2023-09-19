@@ -28,10 +28,10 @@ class MainActivity : ComponentActivity() {
         binding.hint.text =  getString(R.string.hint, "")
         val userGuess = stringInTextField.toIntOrNull() ?: return
         if (userGuess > random) {
-            binding.hint.text = getString(R.string.hint, "Lower")
+            binding.hint.text = getString(R.string.hint, "Lower than$userGuess")
             count += 1
         } else if (userGuess < random) {
-            binding.hint.text = getString(R.string.hint, "Upper")
+            binding.hint.text = getString(R.string.hint, "Upper than $userGuess")
             count += 1
         } else {
             binding.hint.text = getString(R.string.hint, "You did it! in "+ (count + 1) + " time")
