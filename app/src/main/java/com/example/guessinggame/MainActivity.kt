@@ -1,5 +1,6 @@
 package com.example.guessinggame
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.example.guessinggame.databinding.ActivityMainBinding
@@ -22,16 +23,17 @@ class MainActivity : ComponentActivity() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun startGame() {
         val stringInTextField = binding.number.text.toString()
         binding.button.text = "Guess"
         binding.hint.text =  getString(R.string.hint, "")
         val userGuess = stringInTextField.toIntOrNull() ?: return
         if (userGuess > random) {
-            binding.hint.text = getString(R.string.hint, "Lower")
+            binding.hint.text = getString(R.string.hint, "Lower than$userGuess")
             count += 1
         } else if (userGuess < random) {
-            binding.hint.text = getString(R.string.hint, "Upper")
+            binding.hint.text = getString(R.string.hint, "Upper than $userGuess")
             count += 1
         } else {
             binding.hint.text = getString(R.string.hint, "You did it! in "+ (count + 1) + " time")
@@ -40,6 +42,7 @@ class MainActivity : ComponentActivity() {
         return
     }
 
+    @SuppressLint("SetTextI18n")
     private fun newGame() {
         random = (0..10).random()
         count = 0
