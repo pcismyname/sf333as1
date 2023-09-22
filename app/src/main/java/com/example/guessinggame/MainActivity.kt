@@ -1,5 +1,6 @@
 package com.example.guessinggame
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.example.guessinggame.databinding.ActivityMainBinding
@@ -22,6 +23,7 @@ class MainActivity : ComponentActivity() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun startGame() {
         val stringInTextField = binding.number.text.toString()
         binding.button.text = "Guess"
@@ -40,6 +42,7 @@ class MainActivity : ComponentActivity() {
         return
     }
 
+    @SuppressLint("SetTextI18n")
     private fun newGame() {
         random = (0..10).random()
         count = 0
