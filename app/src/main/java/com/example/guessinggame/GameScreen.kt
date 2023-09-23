@@ -1,5 +1,6 @@
 package com.example.guessinggame
 
+import android.provider.Settings.Global.getString
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +21,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAbsoluteAlignment
 import androidx.compose.ui.Modifier
@@ -38,10 +43,44 @@ import androidx.compose.ui.unit.sp
 import com.example.guessinggame.ui.theme.GrayBackground
 import com.example.guessinggame.ui.theme.Purple80
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameScreen() {
-    var text_input = ""
+
+
+    var text_input by remember { mutableStateOf("") }
+    var targetNumber by remember { mutableStateOf((1..10).random()) }
+    var guessCount by remember { mutableStateOf(0) }
+    var hint by remember { mutableStateOf("Try to guess!") }
+    var gameWon by remember { mutableStateOf(false) }
+
+    fun resetGame() {
+        hint = "Try to guess!"
+        text_input = ""
+        guessCount = 0
+        gameWon = false
+        targetNumber = (1..10).random()
+    }
+
+    fun makeGuess() {
+        val guess = text_input.toIntOrNull()
+        if (guess != null) {
+            guessCount++
+            when {
+                guess < targetNumber -> hint = "Too low! Try a higher number."
+                guess > targetNumber -> hint = "Too high! Try a lower number."
+                else -> {
+                    hint = "Congratulations! You've guessed the number!"
+                    gameWon = true
+                }
+            }
+        } else {
+            hint = "Please enter a valid number!"
+        }
+    }
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -64,7 +103,7 @@ fun GameScreen() {
             fontFamily = FontFamily.Serif,
             color = Color.White)
         Text(
-            text = "HINT: ",
+            text = hint,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.Serif,
@@ -83,7 +122,6 @@ fun GameScreen() {
                 .background(GrayBackground),
             contentAlignment = Alignment.Center
         ){
-//            BoardBase()
 
 
             TextField(
@@ -91,8 +129,9 @@ fun GameScreen() {
                 onValueChange = { text_input = it },
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = GrayBackground,
+                    textColor = Color.Black
                 ),
-                label = { Text("Enter your number") }
+                label = { Text("Enter your number")}
             )
         }
         Row(
@@ -100,22 +139,26 @@ fun GameScreen() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "Guess %s times",
+            Text(text = "Guess $guessCount times",
                 fontSize = 20.sp,
                 color = Color.White,
 
             )
-            FilledTonalButton(onClick = { onClick() },
+            FilledTonalButton(onClick = {
+                if(gameWon){
+                    resetGame()
+                } else {
+                    makeGuess()
+                }
+            },
                 shape = RoundedCornerShape(20.dp),
                 elevation = ButtonDefaults.buttonElevation(5.dp),
-                )
+            )
             {
-                Text("Play Again",
-                    fontSize = 20.sp)
+                Text(if(gameWon) "Play Again" else "Make a Guess", fontSize = 20.sp)
+
             }
-
         }
-
 
     }
 }
